@@ -1,3 +1,309 @@
-<script>
-  window.location.href="https://baidu.com/"
-</script>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>致 ZMY - 我的星空与彩虹</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000;
+            color: #fff;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        .container {
+            text-align: center;
+            z-index: 10;
+            max-width: 800px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #ff4081;
+            text-shadow: 0 0 10px #ff4081;
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+        
+        .message {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            text-align: left;
+            padding: 0 20px;
+        }
+        
+        .heart {
+            color: #ff4081;
+            font-size: 2rem;
+            margin: 0 5px;
+        }
+        
+        .btn {
+            background-color: #ff4081;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 10px;
+        }
+        
+        .btn:hover {
+            background-color: #e73370;
+            transform: scale(1.05);
+        }
+        
+        /* 星空样式 */
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+        }
+        
+        /* 彩虹样式 */
+        .rainbow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 600px;
+            height: 300px;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            opacity: 0.7;
+        }
+        
+        .rainbow-arc {
+            position: absolute;
+            border-radius: 50%;
+            border: 10px solid transparent;
+        }
+        
+        .arc1 { width: 600px; height: 600px; top: -300px; border-top-color: #ff0000; }
+        .arc2 { width: 550px; height: 550px; top: -275px; border-top-color: #ff7f00; }
+        .arc3 { width: 500px; height: 500px; top: -250px; border-top-color: #ffff00; }
+        .arc4 { width: 450px; height: 450px; top: -225px; border-top-color: #00ff00; }
+        .arc5 { width: 400px; height: 400px; top: -200px; border-top-color: #0000ff; }
+        .arc6 { width: 350px; height: 350px; top: -175px; border-top-color: #4b0082; }
+        .arc7 { width: 300px; height: 300px; top: -150px; border-top-color: #8b00ff; }
+        
+        /* 爱心样式 */
+        .love-heart {
+            position: absolute;
+            width: 100px;
+            height: 90px;
+            z-index: 5;
+            opacity: 0;
+            transition: opacity 1s;
+        }
+        
+        .love-heart:before,
+        .love-heart:after {
+            content: "";
+            position: absolute;
+            left: 50px;
+            top: 0;
+            width: 50px;
+            height: 80px;
+            background: #ff4081;
+            border-radius: 50px 50px 0 0;
+            transform: rotate(-45deg);
+            transform-origin: 0 100%;
+        }
+        
+        .love-heart:after {
+            left: 0;
+            transform: rotate(45deg);
+            transform-origin: 100% 100%;
+        }
+        
+        /* 动画 */
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .heartbeat {
+            animation: heartbeat 1s infinite;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .subtitle { font-size: 1.2rem; }
+            .message { font-size: 1rem; }
+            .rainbow { width: 300px; }
+            .arc1 { width: 300px; height: 300px; top: -150px; }
+            .arc2 { width: 275px; height: 275px; top: -137.5px; }
+            .arc3 { width: 250px; height: 250px; top: -125px; }
+            .arc4 { width: 225px; height: 225px; top: -112.5px; }
+            .arc5 { width: 200px; height: 200px; top: -100px; }
+            .arc6 { width: 175px; height: 175px; top: -87.5px; }
+            .arc7 { width: 150px; height: 150px; top: -75px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 星空背景 -->
+    <div class="stars" id="stars"></div>
+    
+    <!-- 彩虹效果 -->
+    <div class="rainbow">
+        <div class="rainbow-arc arc1"></div>
+        <div class="rainbow-arc arc2"></div>
+        <div class="rainbow-arc arc3"></div>
+        <div class="rainbow-arc arc4"></div>
+        <div class="rainbow-arc arc5"></div>
+        <div class="rainbow-arc arc6"></div>
+        <div class="rainbow-arc arc7"></div>
+    </div>
+    
+    <!-- 主要内容 -->
+    <div class="container">
+        <h1>致 ZMY <span class="heart">❤</span></h1>
+        <p class="subtitle">我的星空与彩虹</p>
+        
+        <div class="message">
+            <p>亲爱的 ZMY，</p>
+            <p>在我遇见你之前，我的世界是黑白的。直到你的出现，像夜空中最亮的星，照亮了我的整个世界。</p>
+            <p>你是我生命中的彩虹，让我的世界变得五彩斑斓。每一个和你在一起的瞬间，都像是星空下最美丽的梦境。</p>
+            <p>我想对你说：<span class="heart">❤</span> 我喜欢你！<span class="heart">❤</span></p>
+            <p>愿我们的故事，如同这星空与彩虹，永恒而美丽。</p>
+        </div>
+        
+        <button class="btn" id="showHearts">显示爱心</button>
+        <button class="btn" id="heartbeat">心跳效果</button>
+    </div>
+    
+    <!-- 漂浮的爱心 -->
+    <div class="love-heart" id="loveHeart"></div>
+
+    <script>
+        // 创建星空效果 [1,5](@ref)
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 200;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // 随机大小和位置
+                const size = Math.random() * 3;
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.left = `${x}%`;
+                star.style.top = `${y}%`;
+                
+                // 随机亮度
+                const brightness = 0.5 + Math.random() * 0.5;
+                star.style.opacity = brightness;
+                
+                // 闪烁动画
+                const duration = 2 + Math.random() * 3;
+                star.style.animation = `twinkle ${duration}s infinite alternate`;
+                
+                starsContainer.appendChild(star);
+            }
+            
+            // 添加闪烁动画关键帧
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes twinkle {
+                    0% { opacity: 0.3; }
+                    100% { opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // 显示爱心效果 [8](@ref)
+        document.getElementById('showHearts').addEventListener('click', function() {
+            const loveHeart = document.getElementById('loveHeart');
+            loveHeart.style.opacity = '1';
+            
+            // 随机位置
+            const x = 20 + Math.random() * 60;
+            const y = 20 + Math.random() * 60;
+            
+            loveHeart.style.left = `${x}%`;
+            loveHeart.style.top = `${y}%`;
+            
+            // 3秒后淡出
+            setTimeout(() => {
+                loveHeart.style.opacity = '0';
+            }, 3000);
+        });
+        
+        // 心跳效果 [8](@ref)
+        document.getElementById('heartbeat').addEventListener('click', function() {
+            const container = document.querySelector('.container');
+            container.classList.add('heartbeat');
+            
+            // 3秒后停止心跳
+            setTimeout(() => {
+                container.classList.remove('heartbeat');
+            }, 3000);
+        });
+        
+        // 页面加载完成后初始化
+        window.addEventListener('load', function() {
+            createStars();
+            
+            // 添加彩虹动画
+            const rainbowArcs = document.querySelectorAll('.rainbow-arc');
+            rainbowArcs.forEach((arc, index) => {
+                arc.style.animation = `rainbowColor ${7-index}s infinite linear`;
+            });
+            
+            // 添加彩虹颜色动画关键帧
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes rainbowColor {
+                    0% { filter: hue-rotate(0deg); }
+                    100% { filter: hue-rotate(360deg); }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>
